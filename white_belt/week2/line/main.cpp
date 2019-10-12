@@ -1,16 +1,10 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
-//void handle_command(const std::string command, const int arg) {
-//
-//}
 
 struct Person {
     bool worried;
-};
-
-struct Command {
-
 };
 
 
@@ -19,6 +13,7 @@ void remove_from_line(std::vector<Person>& line, int count) {
         line.pop_back();
     }
 }
+
 
 void add_to_line(std::vector<Person>& line, int count) {
     for(int i = 0; i < count; ++i) {
@@ -37,21 +32,40 @@ int get_worry_count(const std::vector<Person>& line) {
 }
 
 
+void print_line(const std::vector<Person>& line) {
+    for (auto p : line) {
+        std::cout << p.worried << ' ';
+    }
+    std::cout << std::endl;
+}
+
 int main() {
     int i = 0;
     int operations_number;
-    int count;
+    int count = 0;
+
+    std::string input;
     std::string command;
     std::vector<Person> line;
 
+    std::cin >> operations_number;
 
-    while(i < operations_number) {
-        std::getline(std::cin, command);
+    while(i <= operations_number) {
+        std::getline(std::cin, input);
+        size_t space_pos = input.find(' ');
+
+        if (space_pos != std::string::npos) {
+            count = std::stoi(input.substr(space_pos));
+            command = input.substr(0, space_pos);
+        } else {
+            command = input;
+        }
+
         if (command == "COME") {
             if (count > 0) {
                 add_to_line(line, count);
             } else {
-                remove_from_line(line, count);
+                remove_from_line(line, count * -1);
             }
         } else if (command == "WORRY" || command == "QUIET") {
             line[count].worried = command == "WORRY";
